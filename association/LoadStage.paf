@@ -2,7 +2,7 @@
 #
 # DC2 policy file for lsst.ap.pipeline.LoadStage
 
-fovRadius                       : 2.5
+fovRadius                       : 0.75
 zonesPerDegree                  : 180
 zonesPerStripe                  : 63
 maxEntriesPerZoneEstimate       : 4096
@@ -17,3 +17,4 @@ rVarProbThreshold               : 90
 iVarProbThreshold               : 90
 zVarProbThreshold               : 90
 yVarProbThreshold               : 90
+

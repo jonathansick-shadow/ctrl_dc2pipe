@@ -1,4 +1,22 @@
+#<?cfg paf policy ?> 
+#
 # association.paf
 # ----
 # General configuration file for the association pipeline.
 #
+
+appStages:      "lsst.ap.pipeline.LoadStage"
+appStages:      "lsst.dps.IOStage.InputStage" "lsst.ap.pipeline.MatchDiaSourcesStage" "lsst.dps.IOStage.OutputStage"
+appStages:      "lsst.dps.IOStage.InputStage" "lsst.ap.pipeline.MatchMopsPredsStage" "lsst.dps.IOStage.OutputStage"
+appStages:      "lsst.ap.pipeline.StoreStage"
+ 
+eventTopics:    "triggerAssociationEvent"
+eventTopics:    "None" "None" "None"
+eventTopics:    "triggerMatchMopsPredsEvent" "None" "None"
+eventTopics:    "None"
+ 
+stagePolicies:  "/share/stack/dc2pipe/association/LoadStage.paf"
+stagePolicies:  "/share/stack/dc2pipe/association/MatchDiaSourcesStageInput.paf" "None" "/share/stack/dc2pipe/association/MatchDiaSourcesStageOutput.paf"
+stagePolicies:  "/share/stack/dc2pipe/association/MatchMopsPredsStageInput.paf" "None" "/share/stack/dc2pipe/association/MatchMopsPredsStageOutput.paf"
+stagePolicies:  "/share/stack/dc2pipe/association/StoreStage.paf"
+
