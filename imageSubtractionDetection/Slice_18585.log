@@ -1,0 +1,6 @@
+Slice::initializeLogger(): Opened Slice Log 18585
+Slice::initializeMPI(): 
+Slice::initializeMPI() : _rank 0
+Slice::initializeMPI(): _rank usize 0 2 
+Slice::invokeShutdownTest() : bufferSize  256 
+Slice::invokeShutdownTest()  : shutdownCommand  CONTINUE

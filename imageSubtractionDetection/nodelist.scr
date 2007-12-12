@@ -1,0 +1,11 @@
+# Format for node list is hostname followed by number of 
+# processes to run on that node 
+#
+# Single node single slice (2 = one for pre/postprocess, one for process)
+#lsst9.ncsa.uiuc.edu:2
+lsst9.ncsa.uiuc.edu:2
+#lsst5.ncsa.uiuc.edu
+#lsst6.ncsa.uiuc.edu
+#lsst7.ncsa.uiuc.edu
+#lsst8.ncsa.uiuc.edu
+lsst10.ncsa.uiuc.edu
