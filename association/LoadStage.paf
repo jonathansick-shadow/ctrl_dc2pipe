@@ -6,7 +6,7 @@ fovRadius                       : 0.75
 zonesPerDegree                  : 180
 zonesPerStripe                  : 63
 maxEntriesPerZoneEstimate       : 4096
-matchRadius                     : 0.05
+matchRadius                     : 0.15
 semiMajorAxisThreshold          : 0.2
 objectChunkFileNamePattern      : "/share/lsst9/objchunk/stripe_%2%/objref_chunk.%3%"
 objectDeltaChunkFileNamePattern : "/share/lsst9/DC2Root/%1%/assoc/output/objdelta/stripe_%2%/objdelta_chunk.%3%"
