@@ -11,6 +11,7 @@ import socket
 
 import lsst.mwi.data as mwiData
 import lsst.mwi.utils
+import lsst.dps.startPipeline
 
 def main():
     try:
@@ -24,8 +25,6 @@ def main():
         print "Error: detection not setup"
         sys.exit(1)
     pipelineDir = os.path.dirname(os.path.abspath(__file__))
-    sys.path += [os.path.dirname(pipelineDir)]
-    import startPipeline
 
     defDetectionPolicyPath = os.path.join(detectionDir, "pipeline", "DetectionStagePolicy.paf")
     defVerbosity = 0
@@ -94,7 +93,7 @@ to feed images to the image subtraction pipeline.
 Control-C the pipeline when it is done (or you have had enough).
 """
     nodeList = os.path.join(pipelineDir, "nodelist.scr")
-    startPipeline.startPipeline(nodeList, "pipeline_policy.paf", "RUN0001")
+    lsst.dps.startPipeline.startPipeline(nodeList, "pipeline_policy.paf", "RUN0001")
 
 if __name__ == "__main__":
     main()
