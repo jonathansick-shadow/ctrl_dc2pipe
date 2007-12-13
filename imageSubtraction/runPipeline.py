@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Run the image subtraction and detection pipeline on a series of images
+"""Run the image subtraction pipeline on a series of images
 """
 from __future__ import with_statement
 
@@ -20,9 +20,10 @@ def main():
     defSubtractionPolicyPath = os.path.join(parentDir, "imageSubtraction.paf")
     defVerbosity = 0
     
-    usage = """usage: %%prog [options]
+    usage = """usage: %%prog [options] runId
 
 Notes:
+- runId is an informative string; for test runs include your initials
 - default --subpolicy=%s""" % (defSubtractionPolicyPath,)
     
     parser = optparse.OptionParser(usage)
@@ -31,9 +32,15 @@ Notes:
         help="verbosity of diagnostic trace messages; default=%s" % (defVerbosity,))
     (options, args) = parser.parse_args()
     
+    if len(args) < 1:
+        print "Error: runId required"
+        sys.exit(0)
+        
+    runId = args[0]
     subtractionPolicyPath = options.subpolicy
 
     print "Image Subtraction Policy file:", subtractionPolicyPath
+    print "RunId:", runId
     
     def copyTemplatedConfigFile(templateName, templateDict):
         """Read a templated configuration file, fill it in and write it out.
@@ -84,12 +91,12 @@ to feed images to the image subtraction pipeline.
 Control-C the pipeline when it is done (or you have had enough).
 """
     nodeList = os.path.join(pipelineDir, "nodelist.scr")
-    lsst.dps.startPipeline.startPipeline(nodeList, "pipeline_policy.paf", "RUN0001")
+    lsst.dps.startPipeline.startPipeline(nodeList, "pipeline_policy.paf", runId)
 
 if __name__ == "__main__":
+    memId0 = mwiData.Citizen_getNextMemId()
     main()
     # check for memory leaks
-    memId0 = 0
     if mwiData.Citizen_census(0, memId0) != 0:
         print mwiData.Citizen_census(0, memId0), "Objects leaked:"
         print mwiData.Citizen_census(mwiData.cout, memId0)

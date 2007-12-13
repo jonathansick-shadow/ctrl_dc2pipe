@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Run the image subtraction and detection pipeline on a series of images
+"""Run the detection pipeline on a series of images and send the event to trigger the association pipeline
 """
 from __future__ import with_statement
 
@@ -20,9 +20,10 @@ def main():
     defDetectionPolicyPath = os.path.join(parentDir, "detection.paf")
     defVerbosity = 0
     
-    usage = """usage: %%prog [options]
+    usage = """usage: %%prog [options] runId
 
 Notes:
+- runId is an informative string; for test runs include your initials
 - default --detpolicy=%s""" % (defDetectionPolicyPath,)
     
     parser = optparse.OptionParser(usage)
@@ -84,12 +85,12 @@ to feed images to the image subtraction pipeline.
 Control-C the pipeline when it is done (or you have had enough).
 """
     nodeList = os.path.join(pipelineDir, "nodelist.scr")
-    lsst.dps.startPipeline.startPipeline(nodeList, "pipeline_policy.paf", "RUN0001")
+    lsst.dps.startPipeline.startPipeline(nodeList, "pipeline_policy.paf", runId)
 
 if __name__ == "__main__":
+    memId0 = mwiData.Citizen_getNextMemId()
     main()
     # check for memory leaks
-    memId0 = 0
     if mwiData.Citizen_census(0, memId0) != 0:
         print mwiData.Citizen_census(0, memId0), "Objects leaked:"
         print mwiData.Citizen_census(mwiData.cout, memId0)

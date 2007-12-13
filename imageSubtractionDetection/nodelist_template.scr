@@ -2,4 +2,4 @@
 # processes to run on that node 
 #
 # Single node single slice (2 = one for pre/postprocess, one for process)
-#%(ipaddress)s:2
+%(ipaddress)s:2
