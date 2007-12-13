@@ -3,3 +3,6 @@
 #
 # Single node single slice (2 = one for pre/postprocess, one for process)
 %(ipaddress)s:2
+lsst10.ncsa.uiuc.edu:6
+lsst9.ncsa.uiuc.edu:5
+lsst8.ncsa.uiuc.edu:5

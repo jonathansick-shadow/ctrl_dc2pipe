@@ -2,7 +2,4 @@
 # processes to run on that node 
 #
 # Single node single slice (2 = one for pre/postprocess, one for process)
-#%(ipaddress)s:2
-lsst9.ncsa.uiuc.edu:2
-lsst10.ncsa.uiuc.edu
-#lsst8.ncsa.uiuc.edu
+%(ipaddress)s:2

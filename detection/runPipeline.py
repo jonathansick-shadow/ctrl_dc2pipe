@@ -14,19 +14,10 @@ import lsst.mwi.utils
 import lsst.dps.startPipeline
 
 def main():
-    try:
-        imageProcDir = os.environ["IMAGEPROC_DIR"]
-    except KeyError:
-        print "Error: imageproc not setup"
-        sys.exit(1)
-    try:
-        detectionDir = os.environ["DETECTION_DIR"]
-    except KeyError:
-        print "Error: detection not setup"
-        sys.exit(1)
     pipelineDir = os.path.dirname(os.path.abspath(__file__))
+    parentDir = os.path.dirname(pipelineDir)
 
-    defDetectionPolicyPath = os.path.join(detectionDir, "pipeline", "DetectionStagePolicy.paf")
+    defDetectionPolicyPath = os.path.join(parentDir, "detection.paf")
     defVerbosity = 0
     
     usage = """usage: %%prog [options]
