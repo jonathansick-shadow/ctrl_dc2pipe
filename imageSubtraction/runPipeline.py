@@ -24,9 +24,12 @@ def main():
 
 Notes:
 - runId is an informative string; for test runs include your initials
-- default --subpolicy=%s""" % (defSubtractionPolicyPath,)
+- policy paths are relative to %s
+- default --subpolicy=%s""" % (pipelineDir, defSubtractionPolicyPath)
     
     parser = optparse.OptionParser(usage)
+    parser.add_option("-c", "--create", action="store_true", default=False,
+        help="create DC2 I/O directories and database tables?")
     parser.add_option("-s", "--subpolicy", default=defSubtractionPolicyPath, help="image subtract policy file")
     parser.add_option("-v", "--verbosity", type=int, default=defVerbosity,
         help="verbosity of diagnostic trace messages; default=%s" % (defVerbosity,))
@@ -38,6 +41,7 @@ Notes:
         
     runId = args[0]
     subtractionPolicyPath = options.subpolicy
+    doCreate = options.create
 
     print "Image Subtraction Policy file:", subtractionPolicyPath
     print "RunId:", runId
@@ -91,7 +95,7 @@ to feed images to the image subtraction pipeline.
 Control-C the pipeline when it is done (or you have had enough).
 """
     nodeList = os.path.join(pipelineDir, "nodelist.scr")
-    lsst.dps.startPipeline.startPipeline(nodeList, "pipeline_policy.paf", runId)
+    lsst.dps.startPipeline.startPipeline(nodeList, "pipeline_policy.paf", runId, doCreate, doCreate)
 
 if __name__ == "__main__":
     memId0 = mwiData.Citizen_getNextMemId()

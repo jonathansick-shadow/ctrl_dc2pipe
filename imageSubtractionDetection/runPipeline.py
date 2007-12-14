@@ -26,10 +26,13 @@ def main():
 
 Notes:
 - runId is an informative string; for test runs include your initials
+- policy paths are relative to %s
 - default --subpolicy=%s
-- default --detpolicy=%s""" % (defSubtractionPolicyPath, defDetectionPolicyPath)
+- default --detpolicy=%s""" % (pipelineDir, defSubtractionPolicyPath, defDetectionPolicyPath)
     
     parser = optparse.OptionParser(usage)
+    parser.add_option("-c", "--create", action="store_true", default=False,
+        help="create DC2 I/O directories and database tables?")
     parser.add_option("-s", "--subpolicy", default=defSubtractionPolicyPath, help="image subtract policy file")
     parser.add_option("-d", "--detpolicy", default=defDetectionPolicyPath, help="detection policy file")
     parser.add_option("-v", "--verbosity", type=int, default=defVerbosity,
@@ -43,6 +46,7 @@ Notes:
     runId = args[0]
     subtractionPolicyPath = options.subpolicy
     detectionPolicyPath = options.detpolicy
+    doCreate = options.create
 
     print "Image Subtraction Policy file:", subtractionPolicyPath
     print "Detection Policy file:", detectionPolicyPath
@@ -98,8 +102,7 @@ to feed images to the image subtraction pipeline.
 Control-C the pipeline when it is done (or you have had enough).
 """
     nodeList = os.path.join(pipelineDir, "nodelist.scr")
-#    subprocess.call([ os.path.join(pipelineDir, "run.sh"), os.path.join(pipelineDir, "pipeline_policy.paf"), runId])
-    lsst.dps.startPipeline.startPipeline(nodeList, "pipeline_policy.paf", runId)
+    lsst.dps.startPipeline.startPipeline(nodeList, "pipeline_policy.paf", runId, doCreate, doCreate)
 
 if __name__ == "__main__":
     memId0 = mwiData.Citizen_getNextMemId()
