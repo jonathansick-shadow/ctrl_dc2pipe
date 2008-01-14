@@ -1,91 +1,39 @@
-#<?cfg paf policy ?>
-# Default Image Subtraction Policy File
+#<?cfg paf policy ?> 
+# 
+# A pipline for testing the imageSubtraction stage.  
+#
 
-# Write intermediate FITS files? (boolean)
-debugIO: false
+# executionMode: oneloop
 
-# Size of the convolution kernel
-kernelRows: 11
-kernelCols: 11
+# receiving an event with this topic name will shut down the pipeline
+#
+shutdownTopic: shutdownImageSubtractionDetection
 
-# Order of kernel spatial variation
-kernelSpatialOrder: 1
+activemqBroker: "lsst8.ncsa.uiuc.edu"   # default is lsst8
 
-# Order of background spatial variation
-backgroundSpatialOrder: 1
+##
+# Stage configuration
 
-getCollectionOfFootprintsForPsfMatching: {
-    # Minimum number of pixels in an acceptible Footprint
-    footprintDiffimNpixMin: 9
+# Stage 1: link the input data into the DC2root tree
+appStages: "lsst.dps.SymLinkStage.SymLinkStage" 
 
-    # Grow footprint by this many pixels
-    footprintDiffimGrow: 20
+# Stage 2: load input data (science and template images) into memory
+appStages: "lsst.dps.IOStage.InputStage"
 
-    # Maximum number of pixels in a Footprint, after growing
-    footprintDiffimNpixAfterGrowMax: 3000
+# Stage 3: subtract the images
+appStages: "lsst.imageproc.pipeline.ImageSubtractStage" 
 
-    # Detection threshold; eventually put in sigmas
-    footprintDetectionThreshold: 250.0
+# Stage 4: write out the difference image
+appStages: "lsst.dps.IOStage.OutputStage"
 
-    # Minimum number of clean candidates
-    minimumCleanFootprints: 50
+# policy files for configuring each stage
+stagePolicies: "imageSubtraction/symlink_policy.paf"         # Stage 1
+stagePolicies: "imageSubtraction/input_policy.paf"           # Stage 2
+stagePolicies: "imageSubtraction/imageSubtraction.paf"       # Stage 3
+stagePolicies: "imageSubtraction/subtractOutput_policy.paf"  # Stage 4
 
-    # How do you change the detection threshold if minimumCleanFootprints not found
-    # Make this shallow now for testing; don't want to get too many objects...
-    detectionThresholdScaling: 0.50
-
-    # How low can you go
-    minimumDetectionThreshold: 125.0
-}
-
-computePsfMatchingKernelForMaskedImage: {
-    # Maximum sum (residual/variance) for an acceptable Kernel; mean should be 0
-    maximumFootprintResidualMean: 0.75
-
-    # Maximum variance (residual/variance) for an acceptable Kernel; variance should be 1
-    maximumFootprintResidualVariance: 2.0
-
-    # Maximum number of sigma in kernel sum for good kernel
-    maximumKernelSumNSigma : 3.0
-
-    # Maximum number of iterations for sigma clipping
-    maximumIterationsKernelSum : 5
-}
-
-computePsfMatchingKernelForPostageStamp: {
-    # Empty
-}
-
-computePcaKernelBasis: {
-    # Minimum number of basis functions to use, after mean
-    minimumNumberOfBases: 3
-
-    # Maximum number of basis functions to use, after mean
-    maximumNumberOfBases: 7
-    
-    # Use enough basis function to model this much of the variance
-    maximumFractionOfEigenvalues: 0.95
-    
-    # Don't use bases whose eigenvalues are this small or smaller
-    minimumAcceptibleEigenvalue: 0.01
-
-    # Maximum number of iterations while doing PCA
-    maximumIteratonsPCA: 5
-
-    # Maximum mean residual comparing each Kernel to its PCA-derived model
-    maximumKernelResidualMean: 0.75
-
-    # Maximum varaince of residuals when comparing each Kernel to its PCA-derived model
-    maximumKernelResidualVariance: 2.0
-}
-
-computeSpatiallyVaryingPsfMatchingKernel: {
-    # Maximum iterations for spatial fit to Kernel basis coefficients
-    maximumIterationsSpatialFit: 5
-
-    # Maximum mean residual comparing each Kernel to its spatial model
-    maximumSpatialKernelResidualMean: 0.75
-
-    # Maximum varaince of residuals when comparing each Kernel to its spatial model
-    maximumSpatialKernelResidualVariance: 2.0
-}
+# events that must be received before a stage can proceed
+eventTopics: "triggerVisitEvent"    # Stage 1
+eventTopics: "None"                 # Stage 2
+eventTopics: "None"                 # Stage 3
+eventTopics: "None"                 # Stage 4

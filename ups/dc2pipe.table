@@ -1,0 +1,7 @@
+setupRequired(dps)
+setupRequired(imageproc)
+setupRequired(detection)
+setupRequired(associate)
+setupRequired(movingobj)
+
+envPrepend(PATH, ${PRODUCT_DIR}/bin)
