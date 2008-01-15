@@ -37,7 +37,7 @@ cl.opts = {}
 cl.args = []
 
 pkgdirvar = "DC2PIPE_DIR"
-ensurempdconfcmd = "ensureMpdConf.sh"
+ensurempdconfcmd = "forceMpdConf.sh"
 
 def createLog():
     log = Log(Log.getDefaultLog(), "dc2pipe")
@@ -96,14 +96,16 @@ def launchPipeline(policyFile, runid):
 
             if node in nodes_set: continue
 
-            cmd = "ssh %s %s/bin/%s -V %s" % \
-                  (node, os.environ[pkgdirvar], ensurempdconfcmd,
-                   cl.opts.verbosity)
-            logger.log(Log.DEBUG, "executing: " + cmd)
+            if not os.path.exists(os.path.join(os.environ["HOME"],".mpd.conf")) \
+               or cl.opts.forceMpdConf:
+                cmd = "ssh %s %s/bin/%s -V %s" % \
+                      (node, os.environ[pkgdirvar], ensurempdconfcmd,
+                       cl.opts.verbosity)
+                logger.log(Log.DEBUG, "executing: " + cmd)
 
-            if subprocess.call(cmd.split()) != 0:
-                raise RuntimeError("Failed to execute ensureMpdConf on " +
-                                   node)
+                if subprocess.call(cmd.split()) != 0:
+                    raise RuntimeError("Failed to execute ensureMpdConf on " +
+                                       node)
 
     cmd = "echo %s %s %s %d %d" % \
           (policyFile, runid, nodesfile, nnodes, nprocs)
