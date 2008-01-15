@@ -1,0 +1,7 @@
+lsst4.ncsa.uiuc.edu
+lsst5.ncsa.uiuc.edu
+lsst6.ncsa.uiuc.edu
+lsst7.ncsa.uiuc.edu
+lsst8.ncsa.uiuc.edu
+lsst9.ncsa.uiuc.edu
+lsst10.ncsa.uiuc.edu
