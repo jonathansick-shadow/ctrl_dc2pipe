@@ -42,7 +42,7 @@ pipelines: {
 
     shortName:  assoc
 
-    nodes:  "lsst10:1"  # master will run here
+    nodes:  "lsst10:2"  # master will run here
 
     launch:  true    # set to false to *not* launch this pipeline
 
