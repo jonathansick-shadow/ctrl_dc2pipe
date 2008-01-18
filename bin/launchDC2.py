@@ -29,10 +29,12 @@ cl.add_option("-s", "--silent", action="store_const", const=-3,
               dest="verbosity",
               help="print no messages")
 cl.add_option("-f", "--forcerunid", action="store_true", dest="forceRunId",
-              help="allow the reuse of an existing Run ID")
+              default=False, help="allow the reuse of an existing Run ID")
 cl.add_option("-D", "--nodbcreate", action="store_false", dest="createDB",
+              default=True,
               help="do not create the database tables for this run")
 cl.add_option("-m", "--mpdconfset", action="store_true", dest="forceMpdConf",
+              default=False, 
               help="force a check for a .mpd.conf file on every desired node")
 cl.add_option("-e", "--envscript", action="store", dest="envscript", 
               default=None, metavar="script",
@@ -45,7 +47,7 @@ cl.args = []
 pkgdirvar = "DC2PIPE_DIR"
 defDomain = ".ncsa.uiuc.edu"
 secretsfile = os.path.join("etc","mpd.conf")
-eventgenerator = "eventgenerator.py lsst4"
+eventgenerator = "eventgenerator.py lsst8"
 DbHost = "lsst10.ncsa.uiuc.edu "
 DbUser = "test"
 DbPassword = "globular.test"
@@ -112,6 +114,9 @@ def launchDC2(policyFile, runid, exposureFiles):
     # determine the parent of the working directories
     home = pol.get("workingHome", "/share/DC2root")
 
+    if not cl.opts.forceRunId and os.path.exists(os.path.join(home, runid)):
+        raise RuntimeError("Run ID already used (use -f to override)")
+
     # deploy each pipeline:  create nodelist.scr, copy over policy files, etc.
     pipepol = pol.get("pipelines")
     pipelines = pipepol.policyNames(True)
@@ -125,6 +130,9 @@ def launchDC2(policyFile, runid, exposureFiles):
             (masternode[pipeline], workingdir[pipeline], envscript[pipeline]) \
                 = prepPipeline(pipeline, ppol, runid, home, repository)
             willrun.append(pipeline)
+
+    # create the database tables for this run
+    if cl.opts.createDB:  createDatabase(runid)
             
     # now launch each pipeline
     for pipeline in willrun:
@@ -163,8 +171,6 @@ def prepPipeline(pname, pol, runid, home, repos):
 
     # ensure the existance of the input/output directories
     wdir = os.path.join(home, runid, pdir)
-    if not cl.opts.forceRunId and os.path.exists(os.path.dirname(wdir)):
-        raise RuntimeError("Run ID already used (use -f to override)")
     dir = os.path.join(wdir, "input")
     if not os.path.exists(dir): os.makedirs(dir)
     dir = os.path.join(wdir, "output")
@@ -218,31 +224,32 @@ def prepPipeline(pname, pol, runid, home, repos):
     return (getNode(nodes[0]), wdir, script)
 
 def createDatabase(runid):
-    dbcmdbase = "mysql -h lsst10.ncsa.uiuc.edu -u%s -p%s " % (DbUser, DbPassword)
+    dbcmdbase = "mysql -h lsst10.ncsa.uiuc.edu -u%s -p%s " % \
+                (DbUser, DbPassword)
     sqldir = os.path.join(os.environ[pkgdirvar], "etc")
 
     logger.log(Log.INFO, "Creating database tables for run " + runid)
-    cmd = '%s -e create database "%s"' % (dbcmdbase, runid)
+    cmd = '%s-e' % dbcmdbase
+    createcmd = 'create database "%s"' % runid
 
-    if logger.willSend(Log.DEBUG):
-        logger.log(Log.DEBUG, "executing: " + cmd)
+    logger.log(Log.DEBUG, "executing: %s '%s'" % (cmd, createcmd))
+    cmd = cmd.split()
+    cmd.append(createcmd)
 
-    if (subprocess.call(cmd.split()) != 0):
+    if (subprocess.call(cmd) != 0):
         raise RuntimeError("Failed to create database for run " + runid)
 
     logger.log(Log.DEBUG, "Created pipeline database")
 
     for sqlCmdFile in DbCmdFiles:
         cmd = dbcmdbase + runid
-        if logger.willSend(Log.DEBUG):
-            logger.log(Log.DEBUG, "sending %s to: %s" % (sqlCmdFile,cmd))
+        logger.log(Log.DEBUG, "sending %s to: %s" % (sqlCmdFile,cmd))
 
         with file(os.path.join(sqldir, sqlCmdFile)) as sqlFile:
-            if subprocess.call(cmd, stdin=sqlFile) != 0:
+            if subprocess.call(cmd.split(), stdin=sqlFile) != 0:
                 raise RuntimeError("Failed to create execute " + sqlCmdFile)
 
-        if logger.willSend(Log.DEBUG):
-            logger.log(Log.DEBUG, "sql script completed: " % sqlCmdFile)
+        logger.log(Log.DEBUG, "sql script completed: %s" % sqlCmdFile)
 
 def launchPipeline(pname, runid, node, wdir, script):
 
