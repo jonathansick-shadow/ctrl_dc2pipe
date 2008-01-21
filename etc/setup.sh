@@ -1,3 +1,3 @@
 source /share/stack/loadLSST.sh
-setup dc2pipe rlp
-setup dps
+setup dc2pipe 
+setup mwi
