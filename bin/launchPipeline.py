@@ -107,9 +107,9 @@ def launchPipeline(policyFile, runid):
                     raise RuntimeError("Failed to execute ensureMpdConf on " +
                                        node)
 
-    cmd = "echo %s %s %s %d %d" % \
+    cmd = "runPipelin.sh.py %s %s %s %d %d" % \
           (policyFile, runid, nodesfile, nnodes, nprocs)
-    logger.log(Log.DEBUG, "exec runPipeline.sh " + cmd)
+    logger.log(Log.DEBUG, "exec " + cmd)
     os.execvp("runPipeline.sh", cmd.split())
 
     raise RuntimeError("Failed to exec runPipeline.sh")
