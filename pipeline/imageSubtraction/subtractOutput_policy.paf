@@ -4,7 +4,7 @@ OutputItems: {
         Required: true
         StoragePolicy: {
             Storage: "FitsStorage"
-            Location: "/share/lsst9/DC2root/%{runId}/ipd/output/%{exposureId}/%{ccdId}/%{exposureId}p_%{ccdId}_diff"
+            Location: "/share/DC2root/%{runId}/ipd/output/%{exposureId}/%{ccdId}/%{exposureId}p_%{ccdId}_diff"
         }
     }
 }

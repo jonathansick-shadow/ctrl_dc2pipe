@@ -2,7 +2,7 @@
 #
 # DC2 policy file for lsst.ap.pipeline.StoreStage
 
-scriptDirectory:   "/share/DC2root/%(runId)s/assoc/output/"
+scriptDirectory:   "/lsst/DC2root/%(runId)s/assoc/output/"
 location:          "mysql://lsst10.ncsa.uiuc.edu:3306/%(runId)s"
 diaSourceTable:    "DIASource"
 varObjectTable:    "Object"

@@ -1,6 +1,6 @@
 RunMode: "preprocess"
 AdditionalData: "exposureId=triggerVisitEvent.exposureId" "filterName=triggerVisitEvent.filterName"
 Links: {
-	sourcePath: "/share/DC2data/D4/LSST/i/%(exposureId)d/"
-	destPath: "/share/DC2root/%(runId)s/ipd/input/%(exposureId)d"
+	sourcePath: "/lsst/DC2data/D4/LSST/i/%(exposureId)d/"
+	destPath: "/lsst/DC2root/%(runId)s/ipd/input/%(exposureId)d"
 }
