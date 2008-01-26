@@ -31,15 +31,33 @@ ALTER TABLE InMemoryObjectTemplate
 
 ALTER TABLE InMemoryObjectTemplate ENGINE=MEMORY;
 
-
 CREATE TABLE InMemoryMatchPairTemplate LIKE MatchPair;
-
 ALTER TABLE InMemoryMatchPairTemplate ENGINE=MEMORY;
 
-
 CREATE TABLE InMemoryIdTemplate LIKE Id;
-
 ALTER TABLE InMemoryIdTemplate ENGINE=MEMORY;
 
-
+-- Populate the Object table for the run
 INSERT INTO Object SELECT * FROM DC2.Object;
+
+-- Create tables that accumulate data from per-visit tables
+CREATE TABLE MopsPreds LIKE mops_pred;
+ALTER TABLE MopsPreds
+    ADD COLUMN visitId INTEGER NOT NULL,
+    ADD INDEX  idx_visitId (visitId);
+
+CREATE TABLE DiaSourceToObjectMatches LIKE MatchPair;
+ALTER TABLE DiaSourceToObjectMatches
+    ADD COLUMN visitId INTEGER NOT NULL,
+    ADD INDEX  idx_visitId (visitId);
+
+CREATE TABLE MopsPredToDiaSourceMatches LIKE MatchPair;
+ALTER TABLE MopsPredToDiaSourceMatches
+    ADD COLUMN visitId INTEGER NOT NULL,
+    ADD INDEX  idx_visitId (visitId);
+
+CREATE TABLE NewObjectIdPairs LIKE IdPair;
+ALTER TABLE NewObjectIdPairs
+    ADD COLUMN visitId INTEGER NOT NULL,
+    ADD INDEX  idx_visitId (visitId);
+
