@@ -8,10 +8,7 @@
 -- for copyright information.
 
 
-CREATE TABLE AAA_Version_DC2_1_7 (version CHAR);
-
-
-
+CREATE TABLE AAA_Version_DC2_1_9 (version CHAR);
 
 CREATE TABLE Science_CCD_Exposure
 (
@@ -40,13 +37,13 @@ CREATE TABLE Science_CCD_Exposure
 	PRIMARY KEY (scienceCCDExposureId),
 	KEY (rawCCDExposureId),
 	KEY (scienceFPAExposureId)
-)  ;
+) ;
 
 
 CREATE TABLE DIASource
 (
 	diaSourceId BIGINT NOT NULL,
-	ampExposureId BIGINT NOT NULL,
+	exposureId BIGINT NOT NULL,
 	filterId TINYINT NOT NULL,
 	objectId BIGINT NULL,
 	movingObjectId BIGINT NULL,
@@ -93,12 +90,12 @@ CREATE TABLE DIASource
 	flag4wcs SMALLINT NULL,
 	_dataSource TINYINT NOT NULL,
 	PRIMARY KEY (diaSourceId),
-	KEY (ampExposureId),
+	KEY (exposureId),
 	KEY (filterId),
 	KEY (movingObjectId),
 	KEY (objectId),
 	KEY (scId)
-) TYPE=MyISAM ;
+) TYPE=MyISAM;
 
 
 CREATE TABLE Visit
@@ -106,7 +103,7 @@ CREATE TABLE Visit
 	visitId INTEGER NOT NULL,
 	exposureId INTEGER NOT NULL,
 	KEY (exposureId)
-)  ;
+) ;
 
 
 CREATE TABLE Raw_CCD_Exposure
@@ -114,11 +111,7 @@ CREATE TABLE Raw_CCD_Exposure
 	rawCCDExposureId BIGINT NOT NULL,
 	ccdDetectorId INTEGER NOT NULL,
 	rawFPAExposureId INTEGER NOT NULL,
-	filterId INTEGER NOT NULL,
 	radecSys VARCHAR(20) NULL,
-	ra DOUBLE NULL,
-	decl DOUBLE NULL,
-	equinox FLOAT(0) NOT NULL,
 	url VARCHAR(255) NULL,
 	ctype1 VARCHAR(20) NOT NULL,
 	ctype2 VARCHAR(20) NOT NULL,
@@ -130,17 +123,13 @@ CREATE TABLE Raw_CCD_Exposure
 	cd21 DOUBLE NOT NULL,
 	cd12 DOUBLE NOT NULL,
 	cd22 DOUBLE NOT NULL,
-	dateObs DATETIME NOT NULL,
 	taiObs DATETIME NULL,
-	mjdObs DOUBLE NULL,
-	expTime FLOAT(0) NOT NULL,
 	darkTime FLOAT(0) NULL,
 	zd FLOAT(0) NOT NULL,
-	airmass FLOAT(0) NULL,
 	PRIMARY KEY (rawCCDExposureId),
 	KEY (rawFPAExposureId),
 	KEY (ccdDetectorId)
-)  ;
+) ;
 
 
 CREATE TABLE _Science_FPA_Exposure2TemplateImage
@@ -150,7 +139,7 @@ CREATE TABLE _Science_FPA_Exposure2TemplateImage
 	KEY (scienceFPAEposureId),
 	KEY (templateImageId),
 	KEY (scienceFPAEposureId)
-)  ;
+) ;
 
 
 CREATE TABLE _Raw_FPA_Exposure2Visit
@@ -160,7 +149,7 @@ CREATE TABLE _Raw_FPA_Exposure2Visit
 	KEY (exposureId),
 	KEY (exposureId),
 	KEY (visitId)
-)  ;
+) ;
 
 
 CREATE TABLE _Object2Type
@@ -170,7 +159,7 @@ CREATE TABLE _Object2Type
 	probability TINYINT NULL DEFAULT 100,
 	KEY (objectId),
 	KEY (typeId)
-)  ;
+) ;
 
 
 CREATE TABLE _MovingObject2Type
@@ -180,7 +169,7 @@ CREATE TABLE _MovingObject2Type
 	probability TINYINT NULL DEFAULT 100,
 	KEY (movingObjectId),
 	KEY (typeId)
-)  ;
+) ;
 
 
 CREATE TABLE Object
@@ -524,7 +513,7 @@ CREATE TABLE Object
 	INDEX idx_Object_zyColor (zyColor ASC),
 	INDEX idx_Object_latestObsTime (latestObsTime ASC),
 	KEY (procHistoryId)
-) TYPE=MyISAM ;
+) TYPE=MyISAM;
 
 
 CREATE TABLE MovingObject
@@ -567,7 +556,7 @@ CREATE TABLE MovingObject
 	flag INTEGER NULL,
 	PRIMARY KEY (movingObjectId),
 	KEY (procHistoryId)
-)  ;
+) ;
 
 
 CREATE TABLE MatchPair
@@ -575,34 +564,42 @@ CREATE TABLE MatchPair
 	first BIGINT NOT NULL,
 	second BIGINT NOT NULL,
 	distance DOUBLE NOT NULL
-)  ;
+) ;
 
 
 CREATE TABLE IdPair
 (
 	first BIGINT NOT NULL,
 	second BIGINT NOT NULL
-)  ;
+) ;
 
 
 CREATE TABLE Id
 (
 	id BIGINT NOT NULL
-)  ;
+) ;
 
 
 CREATE TABLE Science_FPA_Exposure
 (
 	scienceFPAExposureId INTEGER NOT NULL,
 	PRIMARY KEY (scienceFPAExposureId)
-)  ;
+) ;
 
 
 CREATE TABLE Raw_FPA_Exposure
 (
 	rawFPAExposureId INTEGER NOT NULL,
+	ra DOUBLE NULL,
+	decl DOUBLE NULL,
+	filterId INTEGER NOT NULL,
+	equinox FLOAT(0) NOT NULL,
+	dateObs DATETIME NOT NULL,
+	mjdObs DOUBLE NULL,
+	expTime FLOAT(0) NOT NULL,
+	airmass FLOAT(0) NULL,
 	PRIMARY KEY (rawFPAExposureId)
-)  ;
+) ;
 
 
 CREATE TABLE _Science_FPA_Exposure_Group
@@ -640,7 +637,7 @@ CREATE TABLE _Science_FPA_Exposure_Group
 	KEY (cmBiasExposureId),
 	KEY (cmDarkExposureId),
 	KEY (u_cmFlatExposureId)
-)  ;
+) ;
 
 
 CREATE TABLE ObjectType
@@ -648,7 +645,7 @@ CREATE TABLE ObjectType
 	typeId SMALLINT NOT NULL,
 	description VARCHAR(255) NULL,
 	PRIMARY KEY (typeId)
-)  ;
+) ;
 
 
 CREATE TABLE Filter
@@ -659,13 +656,13 @@ CREATE TABLE Filter
 	photClam FLOAT(0) NOT NULL,
 	photBW FLOAT(0) NOT NULL,
 	PRIMARY KEY (filterId)
-)  ;
+) ;
 
 
 CREATE TABLE DIASourceIDTonight
 (
 	DIASourceId BIGINT NOT NULL
-)  ;
+) ;
 
 
 CREATE TABLE CCD_Detector
@@ -677,7 +674,7 @@ CREATE TABLE CCD_Detector
 	rdNoise FLOAT(0) NULL,
 	saturate FLOAT(0) NULL,
 	PRIMARY KEY (ccdDetectorId)
-)  ;
+) ;
 
 
 CREATE TABLE mops_pred
@@ -691,7 +688,7 @@ CREATE TABLE mops_pred
 	pa DOUBLE NOT NULL,
 	mag DOUBLE NOT NULL,
 	magErr FLOAT(0) NOT NULL
-) TYPE=MyISAM ;
+) TYPE=MyISAM;
 
 
 CREATE TABLE mops_orbits
@@ -736,7 +733,7 @@ CREATE TABLE mops_orbits
 	moid_long_2 DOUBLE NULL,
 	PRIMARY KEY (orbit_id),
 	UNIQUE (orbit_id)
-) TYPE=InnoDB ;
+) TYPE=InnoDB;
 
 
 CREATE TABLE mops_ephem
@@ -750,38 +747,38 @@ CREATE TABLE mops_ephem
 	pa DOUBLE NULL,
 	mag DOUBLE NULL,
 	INDEX orbit_id_index (orbit_id ASC)
-) TYPE=MyISAM ;
+) TYPE=MyISAM;
 
 
 
 
 
 ALTER TABLE Science_CCD_Exposure ADD CONSTRAINT FK_Science_CCD_Exposure_Raw_CCD_Exposure 
-	FOREIGN KEY (rawCCDExposureId) REFERENCES Raw_CCD_Exposure (rawCCDExposureId) ;
+	FOREIGN KEY (rawCCDExposureId) REFERENCES Raw_CCD_Exposure (rawCCDExposureId);
 
 ALTER TABLE Science_CCD_Exposure ADD CONSTRAINT FK_Science_CCD_Exposure_Science_FPA_Exposure 
-	FOREIGN KEY (scienceFPAExposureId) REFERENCES Science_FPA_Exposure (scienceFPAExposureId) ;
+	FOREIGN KEY (scienceFPAExposureId) REFERENCES Science_FPA_Exposure (scienceFPAExposureId);
 
 ALTER TABLE Visit ADD CONSTRAINT FK_Visit_Raw_FPA_Exposure 
-	FOREIGN KEY (exposureId) REFERENCES Raw_FPA_Exposure (rawFPAExposureId) ;
+	FOREIGN KEY (exposureId) REFERENCES Raw_FPA_Exposure (rawFPAExposureId);
 
 ALTER TABLE Raw_CCD_Exposure ADD CONSTRAINT FK_Raw_CCD_Exposure_Raw_FPA_Exposure 
-	FOREIGN KEY (rawFPAExposureId) REFERENCES Raw_FPA_Exposure (rawFPAExposureId) ;
+	FOREIGN KEY (rawFPAExposureId) REFERENCES Raw_FPA_Exposure (rawFPAExposureId);
 
 ALTER TABLE _Science_FPA_Exposure2TemplateImage ADD CONSTRAINT FK__Science_FPA_Exposure2TemplateImage_Science_FPA_Exposure 
-	FOREIGN KEY (scienceFPAEposureId) REFERENCES Science_FPA_Exposure (scienceFPAExposureId) ;
+	FOREIGN KEY (scienceFPAEposureId) REFERENCES Science_FPA_Exposure (scienceFPAExposureId);
 
 ALTER TABLE _Raw_FPA_Exposure2Visit ADD CONSTRAINT FK__Raw_FPA_Exposure2Visit_Raw_FPA_Exposure 
-	FOREIGN KEY (exposureId) REFERENCES Raw_FPA_Exposure (rawFPAExposureId) ;
+	FOREIGN KEY (exposureId) REFERENCES Raw_FPA_Exposure (rawFPAExposureId);
 
 ALTER TABLE _Object2Type ADD CONSTRAINT FK_Object2Type_Object 
-	FOREIGN KEY (objectId) REFERENCES Object (latestObsTime) ;
+	FOREIGN KEY (objectId) REFERENCES Object (latestObsTime);
 
 ALTER TABLE _Object2Type ADD CONSTRAINT FK_Object2Type_ObjectType 
-	FOREIGN KEY (typeId) REFERENCES ObjectType (typeId) ;
+	FOREIGN KEY (typeId) REFERENCES ObjectType (typeId);
 
 ALTER TABLE _MovingObject2Type ADD CONSTRAINT FK_MovingObject2Type_MovingObject 
-	FOREIGN KEY (movingObjectId) REFERENCES MovingObject (movingObjectId) ;
+	FOREIGN KEY (movingObjectId) REFERENCES MovingObject (movingObjectId);
 
 ALTER TABLE _MovingObject2Type ADD CONSTRAINT FK_MovingObject2Type_ObjectType 
-	FOREIGN KEY (typeId) REFERENCES ObjectType (typeId) ;
+	FOREIGN KEY (typeId) REFERENCES ObjectType (typeId);
