@@ -20,4 +20,5 @@ nodes=`cat $NODEFILE`
 for node in $nodes; do 
     echo Updating \$HOME/.mpd.conf on $node
     cat $DC2PIPE_DIR/$MPDCONF | ssh $node csh -f -c "'cat >>! $HOME/.mpd.conf'"
+    ssh $node chmod 600 .mpd.conf
 done

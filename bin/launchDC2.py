@@ -113,6 +113,8 @@ def launchDC2(policyFile, runid, exposureFiles):
 
     # determine the parent of the working directories
     home = pol.get("workingHome", "/share/DC2root")
+    if not os.path.exists(home):
+        raise RuntimeError(home + ": working home directory not found")
 
     if not cl.opts.forceRunId and os.path.exists(os.path.join(home, runid)):
         raise RuntimeError("Run ID already used (use -f to override)")
