@@ -10,7 +10,7 @@
 CREATE TABLE DIASourceTemplate LIKE DIASource;
 
 ALTER TABLE DIASourceTemplate
-    DROP KEY ampExposureId,
+    DROP KEY exposureId,
     DROP KEY filterId,
     DROP KEY movingObjectId,
     DROP KEY objectId,
