@@ -1,16 +1,6 @@
+RunMode: preprocess
 AdditionalData: "exposureId=triggerVisitEvent.exposureId"
 OutputItems: {
-    ScienceExposure: {
-        Required: true
-        StoragePolicy: {
-            Storage: "FitsStorage"
-            Location: "/lsst/DC2root/%{runId}/ipd/output/%{exposureId}/%{ccdId}/%{exposureId}p_%{ccdId}"
-        }
-        StoragePolicy: {
-            Storage: "DbStorage"
-            Location: "mysql://lsst10.ncsa.uiuc.edu:3306/%{runId}"
-	}
-    }
     visitMetadata: {
         Required: true
         StoragePolicy: {
@@ -22,11 +12,6 @@ OutputItems: {
 
 Persistence: {
     Formatter: {
-        Exposure: {
-            ScienceExposure: {
-                TableName: "Raw_CCD_Exposure"
-            }
-        }
         DataProperty: {
             visitMetadata: {
                 TableName: "Raw_FPA_Exposure"
