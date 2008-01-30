@@ -15,7 +15,7 @@ OutputItems: {
 
 Persistence: {
     Formatter: {
-        Exposure: {
+        ExposureF: {
             ScienceExposure: {
                 TableName: "Raw_CCD_Exposure"
             }
