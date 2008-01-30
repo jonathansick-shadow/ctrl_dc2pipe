@@ -8,12 +8,12 @@
 -- for copyright information.
 
 
-CREATE TABLE AAA_Version_DC2_1_9 (version CHAR);
+CREATE TABLE AAA_Version_DC2_2_0 (version CHAR);
 
 CREATE TABLE Science_CCD_Exposure
 (
 	scienceCCDExposureId BIGINT NOT NULL,
-	scienceFPAExposureId INTEGER NOT NULL,
+	scienceFPAExposureId BIGINT NOT NULL,
 	rawCCDExposureId BIGINT NOT NULL,
 	ccdDetectorId INTEGER NULL,
 	filterId INTEGER NULL,
@@ -29,7 +29,7 @@ CREATE TABLE Science_CCD_Exposure
 	cd2_1 DOUBLE NOT NULL,
 	cd1_2 DOUBLE NOT NULL,
 	cd2_2 DOUBLE NOT NULL,
-	dateObs TIMESTAMP DEFAULT 0,
+	dateObs TIMESTAMP NOT NULL DEFAULT 0,
 	expTime FLOAT(0) NULL,
 	photoFlam FLOAT(0) NOT NULL,
 	photoZP FLOAT(0) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE Science_CCD_Exposure
 CREATE TABLE DIASource
 (
 	diaSourceId BIGINT NOT NULL,
-	exposureId BIGINT NOT NULL,
+	ccdExposureId BIGINT NOT NULL,
 	filterId TINYINT NOT NULL,
 	objectId BIGINT NULL,
 	movingObjectId BIGINT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE DIASource
 	flag4wcs SMALLINT NULL,
 	_dataSource TINYINT NOT NULL,
 	PRIMARY KEY (diaSourceId),
-	KEY (exposureId),
+	KEY (ccdExposureId),
 	KEY (filterId),
 	KEY (movingObjectId),
 	KEY (objectId),
@@ -101,7 +101,7 @@ CREATE TABLE DIASource
 CREATE TABLE Visit
 (
 	visitId INTEGER NOT NULL,
-	exposureId INTEGER NOT NULL,
+	exposureId BIGINT NOT NULL,
 	KEY (exposureId)
 ) ;
 
@@ -110,7 +110,7 @@ CREATE TABLE Raw_CCD_Exposure
 (
 	rawCCDExposureId BIGINT NOT NULL,
 	ccdDetectorId INTEGER NOT NULL,
-	rawFPAExposureId INTEGER NOT NULL,
+	rawFPAExposureId BIGINT NOT NULL,
 	radecSys VARCHAR(20) NULL,
 	url VARCHAR(255) NOT NULL,
 	ctype1 VARCHAR(20) NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE Raw_CCD_Exposure
 	cd21 DOUBLE NOT NULL,
 	cd12 DOUBLE NOT NULL,
 	cd22 DOUBLE NOT NULL,
-	taiObs TIMESTAMP DEFAULT 0,
+	taiObs TIMESTAMP NOT NULL DEFAULT 0,
 	darkTime FLOAT(0) NULL,
 	zd FLOAT(0) NULL,
 	PRIMARY KEY (rawCCDExposureId),
@@ -134,18 +134,18 @@ CREATE TABLE Raw_CCD_Exposure
 
 CREATE TABLE _Science_FPA_Exposure2TemplateImage
 (
-	scienceFPAEposureId INTEGER NOT NULL,
+	scienceFPAExposureId BIGINT NOT NULL,
 	templateImageId INTEGER NOT NULL,
-	KEY (scienceFPAEposureId),
+	KEY (scienceFPAExposureId),
 	KEY (templateImageId),
-	KEY (scienceFPAEposureId)
+	KEY (scienceFPAExposureId)
 ) ;
 
 
 CREATE TABLE _Raw_FPA_Exposure2Visit
 (
 	visitId INTEGER NOT NULL,
-	exposureId INTEGER NOT NULL,
+	exposureId BIGINT NOT NULL,
 	KEY (exposureId),
 	KEY (exposureId),
 	KEY (visitId)
@@ -185,8 +185,8 @@ CREATE TABLE Object
 	muDecErr DOUBLE NULL,
 	parallax FLOAT(0) NULL,
 	parallaxErr FLOAT(0) NULL,
-	earliestObsTime TIMESTAMP DEFAULT 0,
-	latestObsTime TIMESTAMP DEFAULT 0,
+	earliestObsTime TIMESTAMP NOT NULL DEFAULT 0,
+	latestObsTime TIMESTAMP NOT NULL DEFAULT 0,
 	ugColor DOUBLE NULL,
 	grColor DOUBLE NULL,
 	riColor DOUBLE NULL,
@@ -582,19 +582,19 @@ CREATE TABLE Id
 
 CREATE TABLE Science_FPA_Exposure
 (
-	scienceFPAExposureId INTEGER NOT NULL,
+	scienceFPAExposureId BIGINT NOT NULL,
 	PRIMARY KEY (scienceFPAExposureId)
 ) ;
 
 
 CREATE TABLE Raw_FPA_Exposure
 (
-	rawFPAExposureId INTEGER NOT NULL,
+	rawFPAExposureId BIGINT NOT NULL,
 	ra DOUBLE NOT NULL,
 	decl DOUBLE NOT NULL,
 	filterId INTEGER NOT NULL,
 	equinox FLOAT(0) NOT NULL,
-	dateObs TIMESTAMP DEFAULT 0,
+	dateObs TIMESTAMP NOT NULL DEFAULT 0,
 	mjdObs DOUBLE NULL,
 	expTime FLOAT(0) NOT NULL,
 	airmass FLOAT(0) NULL,
@@ -605,20 +605,20 @@ CREATE TABLE Raw_FPA_Exposure
 CREATE TABLE _Science_FPA_Exposure_Group
 (
 	cseGroupId MEDIUMINT NOT NULL,
-	darkTime TIMESTAMP DEFAULT 0,
-	biasTime TIMESTAMP DEFAULT 0,
-	u_fringeTime TIMESTAMP DEFAULT 0,
-	g_fringeTime TIMESTAMP DEFAULT 0,
-	r_fringeTime TIMESTAMP DEFAULT 0,
-	i_fringeTime TIMESTAMP DEFAULT 0,
-	z_fringeTime TIMESTAMP DEFAULT 0,
-	y_fringeTime TIMESTAMP DEFAULT 0,
-	u_flatTime TIMESTAMP DEFAULT 0,
-	g_FlatTime TIMESTAMP DEFAULT 0,
-	r_flatTime TIMESTAMP DEFAULT 0,
-	i_flatTime TIMESTAMP DEFAULT 0,
-	z_flatTime TIMESTAMP DEFAULT 0,
-	y_flatTime TIMESTAMP DEFAULT 0,
+	darkTime TIMESTAMP NOT NULL DEFAULT 0,
+	biasTime TIMESTAMP NOT NULL DEFAULT 0,
+	u_fringeTime TIMESTAMP NOT NULL DEFAULT 0,
+	g_fringeTime TIMESTAMP NOT NULL DEFAULT 0,
+	r_fringeTime TIMESTAMP NOT NULL DEFAULT 0,
+	i_fringeTime TIMESTAMP NOT NULL DEFAULT 0,
+	z_fringeTime TIMESTAMP NOT NULL DEFAULT 0,
+	y_fringeTime TIMESTAMP NOT NULL DEFAULT 0,
+	u_flatTime TIMESTAMP NOT NULL DEFAULT 0,
+	g_FlatTime TIMESTAMP NOT NULL DEFAULT 0,
+	r_flatTime TIMESTAMP NOT NULL DEFAULT 0,
+	i_flatTime TIMESTAMP NOT NULL DEFAULT 0,
+	z_flatTime TIMESTAMP NOT NULL DEFAULT 0,
+	y_flatTime TIMESTAMP NOT NULL DEFAULT 0,
 	cmBiasExposureId INTEGER NULL,
 	cmDarkExposureId INTEGER NULL,
 	u_cmFlatExposureId INTEGER NULL,
@@ -766,7 +766,7 @@ ALTER TABLE Raw_CCD_Exposure ADD CONSTRAINT FK_Raw_CCD_Exposure_Raw_FPA_Exposure
 	FOREIGN KEY (rawFPAExposureId) REFERENCES Raw_FPA_Exposure (rawFPAExposureId);
 
 ALTER TABLE _Science_FPA_Exposure2TemplateImage ADD CONSTRAINT FK__Science_FPA_Exposure2TemplateImage_Science_FPA_Exposure 
-	FOREIGN KEY (scienceFPAEposureId) REFERENCES Science_FPA_Exposure (scienceFPAExposureId);
+	FOREIGN KEY (scienceFPAExposureId) REFERENCES Science_FPA_Exposure (scienceFPAExposureId);
 
 ALTER TABLE _Raw_FPA_Exposure2Visit ADD CONSTRAINT FK__Raw_FPA_Exposure2Visit_Raw_FPA_Exposure 
 	FOREIGN KEY (exposureId) REFERENCES Raw_FPA_Exposure (rawFPAExposureId);
