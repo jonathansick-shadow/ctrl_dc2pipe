@@ -6,6 +6,7 @@ OutputItems: {
             Storage: "DbStorage"
             Location: "mysql://lsst10.ncsa.uiuc.edu:3306/%{runId}"
 	}
+    }
     rawFPAExposure: {
         Required: true
         StoragePolicy: {
