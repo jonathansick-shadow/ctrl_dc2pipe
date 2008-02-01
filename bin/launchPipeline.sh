@@ -34,5 +34,6 @@ if [ -z "$DC2PIPE_DIR" ]; then
     setup dc2pipe $version
 fi
 
+eups list 2> /dev/null | grep Setup > eups-env.txt
 pipeline=`echo ${1} | sed -e 's/\..*$//'`
 nohup $bindir/launchPipeline.py $* > ${pipeline}-${2}.log 2>&1  &
