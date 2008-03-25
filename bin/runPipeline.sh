@@ -21,17 +21,21 @@ nodelist=${3}
 nodes=${4}
 usize=${5}
 
+localnode=`hostname | sed -e 's/\..*$//'`
+localncpus=`grep $localnode $nodelist | sed -e 's/^.*://'`
+
 # Subtract 1 to the number of slices to get the universe size 
 nslices=$(( $usize - 1 ))
 
 echo "nodes ${nodes}"
 echo "nslices ${nslices}"
 echo "usize ${usize}"
+echo "ncpus ${localncpus}"
 
 # MPI commands will be in PATH if mpich2 is in build
 echo "Running mpdboot"
 
-echo mpdboot --totalnum=${nodes} --file=$nodelist --verbose
+echo mpdboot --totalnum=${nodes} --file=$nodelist --ncpus=$localncpus --verbose
 mpdboot --totalnum=${nodes} --file=$nodelist --verbose
 
 sleep 3s
