@@ -36,7 +36,7 @@ echo "ncpus ${localncpus}"
 echo "Running mpdboot"
 
 echo mpdboot --totalnum=${nodes} --file=$nodelist --ncpus=$localncpus --verbose
-mpdboot --totalnum=${nodes} --file=$nodelist --verbose
+mpdboot --totalnum=${nodes} --file=$nodelist --ncpus=$localncpus --verbose
 
 sleep 3s
 echo "Running mpdtrace"
