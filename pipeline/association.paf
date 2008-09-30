@@ -13,12 +13,12 @@ activemqBroker: lsst8.ncsa.uiuc.edu
 # Stage configuration
 
 appStages:      "lsst.ap.pipeline.LoadStage"                  # Stage 1
-appStages:      "lsst.dps.IOStage.InputStage"                 # Stage 2
+appStages:      "lsst.pex.harness.IOStage.InputStage"         # Stage 2
 appStages:      "lsst.ap.pipeline.MatchDiaSourcesStage"       # Stage 3
-appStages:      "lsst.dps.IOStage.OutputStage"                # Stage 4
-appStages:      "lsst.dps.IOStage.InputStage"                 # Stage 5
+appStages:      "lsst.pex.harness.IOStage.OutputStage"        # Stage 4
+appStages:      "lsst.pex.harness.IOStage.InputStage"         # Stage 5
 appStages:      "lsst.ap.pipeline.MatchMopsPredsStage"        # Stage 6
-appStages:      "lsst.dps.IOStage.OutputStage"                # Stage 7
+appStages:      "lsst.pex.harness.IOStage.OutputStage"        # Stage 7
 appStages:      "lsst.ap.pipeline.StoreStage"                 # Stage 8
  
 stagePolicies:  "association/LoadStage.paf"                   # Stage 1

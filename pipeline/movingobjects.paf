@@ -9,10 +9,10 @@ shutdownTopic:  shutdownMops
 
 activemqBroker: "lsst8.ncsa.uiuc.edu"
 
-appStages:    "lsst.dps.IOStage.InputStage"                   # Stage 1
-appStages:    "lsst.movingobj.nightmops.pipeline.MopsStage"   # Stage 2
-appStages:    "lsst.dps.IOStage.OutputStage"                  # Stage 3
-appStages:    "lsst.dps.EventStage.EventStage"
+appStages:    "lsst.pex.harness.IOStage.InputStage"           # Stage 1
+appStages:    "lsst.mops.nightmops.pipeline.MopsStage"        # Stage 2
+appStages:    "lsst.pex.harness.IOStage.OutputStage"          # Stage 3
+appStages:    "lsst.pex.harness.EventStage.EventStage"
 
 stagePolicies: "movingobjects/input_policy.paf"               # Stage 1
 stagePolicies: "movingobjects/NightMopsStagePolicy.paf"       # Stage 2

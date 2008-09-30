@@ -16,35 +16,35 @@ activemqBroker: "lsst8.ncsa.uiuc.edu"   # default is lsst8
 # Stage configuration
 
 # Stage 1: link the input data into the DC2root tree
-appStages: "lsst.dps.SymLinkStage.SymLinkStage" 
+appStages: "lsst.pex.harness.SymLinkStage.SymLinkStage" 
 
 # Stage 2: load input data (science and template images) into memory
-appStages: "lsst.dps.IOStage.InputStage"
+appStages: "lsst.pex.harness.IOStage.InputStage"
 
 # Stage 3: transform the per-visit metadata
 appStages: "lsst.imageproc.pipeline.VisitMetadataStage"
 
 # Stage 4: persist the per-visit metadata
-appStages: "lsst.dps.IOStage.OutputStage"
+appStages: "lsst.pex.harness.IOStage.OutputStage"
 
 # Stage 5: persist the Exposure with its metadata
-appStages: "lsst.dps.IOStage.OutputStage"
+appStages: "lsst.pex.harness.IOStage.OutputStage"
 
 # Stage 6: subtract the images
 appStages: "lsst.imageproc.pipeline.ImageSubtractStage" 
 
 # Stage 7: write out the difference image
-appStages: "lsst.dps.IOStage.OutputStage"
+appStages: "lsst.pex.harness.IOStage.OutputStage"
 
 # Stage 8: detect sources in difference image
 appStages: "lsst.detection.pipeline.DetectionStage" 
 
 # Stage 9: write out the table of detected sources to the database
-appStages: "lsst.dps.IOStage.OutputStage"
+appStages: "lsst.pex.harness.IOStage.OutputStage"
 
 # Stage 10: send an event to the association pipeline indicating that 
 #           new detections are available
-appStages: "lsst.dps.EventStage.EventStage"
+appStages: "lsst.pex.harness.EventStage.EventStage"
 
 # policy files for configuring each stage
 stagePolicies: "imageSubtractionDetection/symlink_policy.paf"         # Stage 1
