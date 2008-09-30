@@ -1,8 +1,8 @@
-setupRequired(dps)
-setupRequired(imageproc)
+setupRequired(pex_harness)
+setupRequired(ip_diffim)
 setupRequired(detection)
-setupRequired(associate)
-setupRequired(movingobj)
+setupRequired(ap)
+setupRequired(mops)
 
 envPrepend(PATH, ${PRODUCT_DIR}/bin)
 envPrepend(PORT_RANGE, "35001:35099")

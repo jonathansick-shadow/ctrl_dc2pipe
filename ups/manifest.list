@@ -1,6 +1,0 @@
->merge: dps
->merge: imageproc
->merge: detection
->merge: associate
->merge: movingobj
->self
