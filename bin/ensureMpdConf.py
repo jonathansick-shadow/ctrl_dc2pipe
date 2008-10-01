@@ -2,8 +2,8 @@
 #
 import re, sys, os, os.path, shutil, traceback, stat
 import optparse
-from lsst.mwi.logging import Log
-from lsst.mwi.policy import Policy
+from lsst.pex.logging import Log
+from lsst.pex.policy import Policy
 
 usage = """usage: %%prog [-vqs] [-V int]
 

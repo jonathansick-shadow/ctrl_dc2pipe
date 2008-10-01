@@ -1,2 +1,2 @@
-source /share/stack/loadLSST.csh
+source /lsst/DMSstack/loadLSST.csh
 setup dc2pipe 

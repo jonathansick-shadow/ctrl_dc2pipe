@@ -2,8 +2,8 @@
 #
 import re, sys, os, os.path, shutil, subprocess
 import optparse, traceback
-from lsst.mwi.logging import Log
-from lsst.mwi.policy import Policy
+from lsst.pex.logging import Log
+from lsst.pex.policy import Policy
 
 usage = """usage: %prog [-vqs] [-V int] [-p dc2pipe_policy_file] [-r runId] [node ...]
 
