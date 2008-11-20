@@ -45,6 +45,7 @@ cl.opts = {}
 cl.args = []
 
 pkgdirvar = "DC2PIPE_DIR"
+catdirvar = "CAT_DIR"
 defDomain = ".ncsa.uiuc.edu"
 secretsfile = os.path.join("etc","mpd.conf")
 eventgenerator = "eventgenerator.py lsst8"
@@ -228,7 +229,7 @@ def prepPipeline(pname, pol, runid, home, repos):
 def createDatabase(runid):
     dbcmdbase = "mysql -h lsst10.ncsa.uiuc.edu -u%s -p%s " % \
                 (DbUser, DbPassword)
-    sqldir = os.path.join(os.environ[pkgdirvar], "etc")
+    sqldir = os.path.join(os.environ[catdirvar], "sql")
 
     logger.log(Log.INFO, "Creating database tables for run " + runid)
     cmd = '%s-e' % dbcmdbase
