@@ -22,7 +22,7 @@ appStages: "lsst.pex.harness.SymLinkStage.SymLinkStage"
 appStages: "lsst.pex.harness.IOStage.InputStage"
 
 # Stage 3: transform the per-visit metadata
-appStages: "lsst.imageproc.pipeline.VisitMetadataStage"
+appStages: "lsst.ip.diffim.pipeline.VisitMetadataStage"
 
 # Stage 4: persist the per-visit metadata
 appStages: "lsst.pex.harness.IOStage.OutputStage"
@@ -31,7 +31,7 @@ appStages: "lsst.pex.harness.IOStage.OutputStage"
 appStages: "lsst.pex.harness.IOStage.OutputStage"
 
 # Stage 6: subtract the images
-appStages: "lsst.imageproc.pipeline.ImageSubtractStage" 
+appStages: "lsst.ip.diffim.pipeline.ImageSubtractStage" 
 
 # Stage 7: write out the difference image
 appStages: "lsst.pex.harness.IOStage.OutputStage"
