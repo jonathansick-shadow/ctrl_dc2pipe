@@ -52,6 +52,20 @@ computePsfMatchingKernelForMaskedImage: {
     maximumIterationsKernelSum : 5
 }
 
+computeDiffImStats: {
+    # Maximum sum (residual/variance) for an acceptable Kernel; mean should be 0
+    maximumFootprintResidualMean: 0.75
+
+    # Maximum variance (residual/variance) for an acceptable Kernel; variance should be 1
+    maximumFootprintResidualVariance: 3.0
+
+    # Maximum number of sigma in kernel sum for good kernel
+    maximumKernelSumNSigma : 3.0
+
+    # Maximum number of iterations for sigma clipping
+    maximumIterationsKernelSum : 5
+}
+
 computePsfMatchingKernelForPostageStamp: {
     # Empty
 }

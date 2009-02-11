@@ -1,4 +1,4 @@
-setupRequired(cat 3.0)
+setupRequired(cat >= 3.0)
 setupRequired(pex_harness)
 setupRequired(ip_diffim)
 setupRequired(detection)
