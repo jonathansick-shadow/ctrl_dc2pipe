@@ -11,7 +11,7 @@ OutputItems: {
 }
 Persistence: {
    Formatter: {
-       DiaSourceVector: {
+       SourceVector: {
            DiaSources: {
                templateTableName: "DIASourceTemplate"
            }
