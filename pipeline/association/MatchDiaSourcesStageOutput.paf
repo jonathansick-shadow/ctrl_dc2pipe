@@ -18,7 +18,7 @@ Persistence: {
     Formatter: {
         MatchPairVector: {
             DiaSourceToObjectMatches: {
-                templateTableName: "MatchPair"
+                templateTableName: "_tmpl_MatchPair"
             }
         }
     }

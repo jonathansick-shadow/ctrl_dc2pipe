@@ -25,12 +25,12 @@ Persistence: {
     Formatter: {
         IdPairVector: {
             NewObjectIdPairs: {
-                templateTableName: "IdPair"
+                templateTableName: "_tmpl_IdPair"
             }
         }
         MatchPairVector: {
             MopsPredToDiaSourceMatches: {
-                templateTableName: "MatchPair"
+                templateTableName: "_tmpl_MatchPair"
             }
         }
     }

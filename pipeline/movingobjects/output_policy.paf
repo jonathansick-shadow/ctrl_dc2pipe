@@ -13,7 +13,7 @@ Persistence: {
    Formatter: {
        MovingObjectPredictionVector: {
            MopsPreds: {
-               templateTableName: "mops_pred"
+               templateTableName: "_tmpl_mops_Prediction"
            }
        }
    }
