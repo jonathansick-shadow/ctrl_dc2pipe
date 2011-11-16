@@ -1,0 +1,17 @@
+
+# /
+
+# /pipeline/detection/
+/pipeline/detection/nodelist.scr
+/pipeline/detection/pipeline_policy.paf
+/pipeline/detection/*.log
+
+# /pipeline/imageSubtraction/
+/pipeline/imageSubtraction/nodelist.scr
+/pipeline/imageSubtraction/pipeline_policy.paf
+/pipeline/imageSubtraction/*.log
+
+# /pipeline/imageSubtractionDetection/
+/pipeline/imageSubtractionDetection/nodelist.scr
+/pipeline/imageSubtractionDetection/pipeline_policy.paf
+/pipeline/imageSubtractionDetection/*.log
