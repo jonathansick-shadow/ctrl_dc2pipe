@@ -1,8 +1,15 @@
 #! /usr/bin/env python
 #
 from __future__ import with_statement
-import re, sys, os, os.path, shutil, subprocess
-import optparse, traceback, time
+import re
+import sys
+import os
+import os.path
+import shutil
+import subprocess
+import optparse
+import traceback
+import time
 from lsst.pex.logging import Log
 from lsst.pex.policy import Policy
 
@@ -34,9 +41,9 @@ cl.add_option("-D", "--nodbcreate", action="store_false", dest="createDB",
               default=True,
               help="do not create the database tables for this run")
 cl.add_option("-m", "--mpdconfset", action="store_true", dest="forceMpdConf",
-              default=False, 
+              default=False,
               help="force a check for a .mpd.conf file on every desired node")
-cl.add_option("-e", "--envscript", action="store", dest="envscript", 
+cl.add_option("-e", "--envscript", action="store", dest="envscript",
               default=None, metavar="script",
               help="an environment-setting script to source on pipeline platform")
 
@@ -47,25 +54,28 @@ cl.args = []
 pkgdirvar = "DC2PIPE_DIR"
 catdirvar = "CAT_DIR"
 defDomain = ".ncsa.uiuc.edu"
-secretsfile = os.path.join("etc","mpd.conf")
+secretsfile = os.path.join("etc", "mpd.conf")
 eventgenerator = "eventgenerator.py lsst8"
 DbHost = "lsst10.ncsa.uiuc.edu "
 DbUser = "test"
 DbPassword = "globular.test"
 DbCmdFiles = ["lsstSchema4mysql.sql", "lsstPipelineSetup4mysql.sql"]
 
+
 def createLog():
     log = Log(Log.getDefaultLog(), "dc2pipe")
     return log
 
+
 def setVerbosity(verbosity):
-    logger.setThreshold(-10 * verbosity)  
+    logger.setThreshold(-10 * verbosity)
 
 logger = createLog()
 
+
 def main():
     try:
-        (cl.opts, cl.args) = cl.parse_args();
+        (cl.opts, cl.args) = cl.parse_args()
         setVerbosity(cl.opts.verbosity)
 
         if len(cl.args) < 1:
@@ -74,7 +84,7 @@ def main():
         if len(cl.args) < 2:
             print usage
             raise RuntimeError("Missing argument: runid")
-    
+
         launchDC2(cl.args[0], cl.args[1], cl.args[2:])
 
     except:
@@ -84,6 +94,7 @@ def main():
         logger.log(Log.FATAL, tb[-1].strip())
         logger.log(Log.DEBUG, "".join(tb[0:-1]).strip())
 #        sys.exit(1)
+
 
 def launchDC2(policyFile, runid, exposureFiles):
     if not os.environ.has_key(pkgdirvar):
@@ -95,16 +106,16 @@ def launchDC2(policyFile, runid, exposureFiles):
 
     pol = Policy.createPolicy(policyFile)
     if cl.opts.policyRepository is not None:
-        pol.set("policyRepository", cl.opts.policyRepository);
+        pol.set("policyRepository", cl.opts.policyRepository)
 
     # find the policy repository
     defRepository = os.path.join(os.environ[pkgdirvar], "pipeline")
     repository = pol.get("policyRepository", defRepository)
 
     if not os.path.exists(repository):
-        raise RuntimeError(repository + ": directory not found");
+        raise RuntimeError(repository + ": directory not found")
     if not os.path.isdir(repository):
-        raise RuntimeError(repository + ": not a directory");
+        raise RuntimeError(repository + ": not a directory")
 
     # set the exposure lists
     if len(exposureFiles) == 0:
@@ -135,12 +146,13 @@ def launchDC2(policyFile, runid, exposureFiles):
             willrun.append(pipeline)
 
     # create the database tables for this run
-    if cl.opts.createDB:  createDatabase(runid)
-            
+    if cl.opts.createDB:
+        createDatabase(runid)
+
     # now launch each pipeline
     for pipeline in willrun:
         ppol = pipepol.get(pipeline)
-        launchPipeline(pipeline, runid, 
+        launchPipeline(pipeline, runid,
                        masternode[pipeline], workingdir[pipeline],
                        envscript[pipeline])
 
@@ -150,9 +162,9 @@ def launchDC2(policyFile, runid, exposureFiles):
             if os.path.exists(efile) and not efile.startswith("."):
                 efile = os.path.join(".", efile)
             elif os.path.exists(os.path.join(os.environ[pkgdirvar],
-                                             "exposureLists",efile)):
+                                             "exposureLists", efile)):
                 efile = os.path.join(os.environ[pkgdirvar],
-                                    "exposureLists",efile)
+                                     "exposureLists", efile)
         if not os.path.exists(efile):
             logger.log(Log.WARN, "Exposure list file not found: " + efile)
 
@@ -161,23 +173,26 @@ def launchDC2(policyFile, runid, exposureFiles):
 
         logger.log(Log.INFO, "Sending exposure data from " + efile)
         logger.log(Log.DEBUG,
-                   "executing: %s < %s"  % (eventgenerator, efile))
+                   "executing: %s < %s" % (eventgenerator, efile))
 
         with file(efile) as expfile:
             if subprocess.call(eventgenerator.split(), stdin=expfile) != 0:
                 raise RuntimeError("Failed to execute eventgenerator")
 
+
 def prepPipeline(pname, pol, runid, home, repos):
-    
+
     # ensure the existence of the working directory
     pdir = pol.get("shortName", pname)
 
     # ensure the existance of the input/output directories
     wdir = os.path.join(home, runid, pdir)
     dir = os.path.join(wdir, "input")
-    if not os.path.exists(dir): os.makedirs(dir)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
     dir = os.path.join(wdir, "output")
-    if not os.path.exists(dir): os.makedirs(dir)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
     if pname == "assoc":
         os.makedirs(os.path.join(wdir, "update"))
 
@@ -187,7 +202,8 @@ def prepPipeline(pname, pol, runid, home, repos):
     if not os.path.isabs(wdir):
         wdir = os.path.join(home, wdir)
 
-    if not os.path.exists(wdir): os.makedirs(wdir)
+    if not os.path.exists(wdir):
+        os.makedirs(wdir)
     logger.log(Log.INFO, "Working directory for %s: %s" % (pname, wdir))
 
     # create the nodelist file
@@ -211,20 +227,21 @@ def prepPipeline(pname, pol, runid, home, repos):
     polfile = os.path.join(repos, pname+".paf")
     polbasefile = os.path.basename(polfile)
     if os.path.exists(os.path.join(wdir, pname+".paf")):
-        logger.log(Log.WARN, 
-                   "Working directory already contains %s; won't overwrite" % \
-                       polbasefile)
+        logger.log(Log.WARN,
+                   "Working directory already contains %s; won't overwrite" %
+                   polbasefile)
     else:
         shutil.copy(polfile, wdir)
 
     if os.path.exists(os.path.join(wdir, pname)):
-        logger.log(Log.WARN, 
-          "Working directory already contains %s directory; won't overwrite" % \
-                       pname)
+        logger.log(Log.WARN,
+                   "Working directory already contains %s directory; won't overwrite" %
+                   pname)
     else:
-        shutil.copytree(os.path.join(repos,pname), os.path.join(wdir,pname))
+        shutil.copytree(os.path.join(repos, pname), os.path.join(wdir, pname))
 
     return (getNode(nodes[0]), wdir, script)
+
 
 def createDatabase(runid):
     dbcmdbase = "mysql -h lsst10.ncsa.uiuc.edu -u%s -p%s " % \
@@ -246,7 +263,7 @@ def createDatabase(runid):
 
     for sqlCmdFile in DbCmdFiles:
         cmd = dbcmdbase + runid
-        logger.log(Log.DEBUG, "sending %s to: %s" % (sqlCmdFile,cmd))
+        logger.log(Log.DEBUG, "sending %s to: %s" % (sqlCmdFile, cmd))
 
         with file(os.path.join(sqldir, sqlCmdFile)) as sqlFile:
             if subprocess.call(cmd.split(), stdin=sqlFile) != 0:
@@ -254,25 +271,28 @@ def createDatabase(runid):
 
         logger.log(Log.DEBUG, "sql script completed: %s" % sqlCmdFile)
 
+
 def launchPipeline(pname, runid, node, wdir, script):
 
     launchcmd = os.path.join(os.environ[pkgdirvar], "bin", "launchPipeline.sh")
-    cmd = ["ssh", node, 
-           "cd %s; source %s; %s %s %s -V %s" \
-        % (wdir, script, launchcmd, pname+".paf", runid, cl.opts.verbosity) ]
+    cmd = ["ssh", node,
+           "cd %s; source %s; %s %s %s -V %s"
+           % (wdir, script, launchcmd, pname+".paf", runid, cl.opts.verbosity)]
 
-    logger.log(Log.INFO, "launching %s on %s" % (pname, node) )
+    logger.log(Log.INFO, "launching %s on %s" % (pname, node))
     logger.log(Log.DEBUG, "executing: " + " ".join(cmd))
 
     if subprocess.call(cmd) != 0:
         raise RuntimeError("Failed to launch " + pname)
 
+
 def getNode(nodeentry):
     colon = nodeentry.find(':')
-    if colon < 1:  
+    if colon < 1:
         return nodeentry
-    else: 
+    else:
         return nodeentry[0:colon]
+
 
 def deployMPISecrets(nodelist):
     defSecrets = os.path.join(os.environ[pkgdirvar], secretsfile)
@@ -287,7 +307,7 @@ def deployMPISecrets(nodelist):
             logger.log(Log.DEBUG, "exec: " + cmd)
         ok = subprocess.call(cmd.split())
         if ok != 0:
-            raise RuntimeError("Failed to copy secrets file to %s" % node);
+            raise RuntimeError("Failed to copy secrets file to %s" % node)
 
     return True
 
@@ -311,8 +331,8 @@ def expandNodeHost(nodeentry):
             nodeentry = "%s%s:1" % (node, defDomain)
 
     return nodeentry
-    
+
 
 if __name__ == "__main__":
     main()
-    
+

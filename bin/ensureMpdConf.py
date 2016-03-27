@@ -1,6 +1,12 @@
 #! /usr/bin/env python
 #
-import re, sys, os, os.path, shutil, traceback, stat
+import re
+import sys
+import os
+import os.path
+import shutil
+import traceback
+import stat
 import optparse
 from lsst.pex.logging import Log
 from lsst.pex.policy import Policy
@@ -36,18 +42,21 @@ pkgdirvar = "DC2PIPE_DIR"
 mpdconf = ".mpd.conf"
 pkgmpdconf = os.path.join("etc", "mpd.conf")
 
+
 def createLog():
     log = Log(Log.getDefaultLog(), "dc2pipe.ensureMpdConf")
     return log
 
+
 def setVerbosity(verbosity):
-    logger.setThreshold(-10 * verbosity)  
+    logger.setThreshold(-10 * verbosity)
 
 logger = createLog()
 
+
 def main():
     try:
-        (cl.opts, cl.args) = cl.parse_args();
+        (cl.opts, cl.args) = cl.parse_args()
         setVerbosity(cl.opts.verbosity)
         ensureMpdConf()
 
@@ -59,6 +68,7 @@ def main():
         logger.log(Log.DEBUG, "".join(tb[0:-1]).strip())
         sys.exit(1)
 
+
 def ensureMpdConf():
     if not os.environ.has_key(pkgdirvar):
         raise RuntimeError("DC2PIPE_DIR env. var not set (setup dc2pipe)")
@@ -68,7 +78,7 @@ def ensureMpdConf():
     if not os.path.exists(path):
         logger.log(Log.DEBUG, "copying new .mpd.conf")
         shutil.copyfile(os.path.join(pkgdir, pkgmpdconf), path)
-        os.chmod(path, stat.S_IREAD|stat.S_IWRITE)
+        os.chmod(path, stat.S_IREAD | stat.S_IWRITE)
     else:
         logger.log(Log.DEBUG, "$HOME/.mpd.conf already exists")
 

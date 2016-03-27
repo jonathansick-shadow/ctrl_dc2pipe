@@ -1,8 +1,14 @@
 #! /usr/bin/env python
 #
 from __future__ import with_statement
-import re, sys, os, os.path, shutil, subprocess
-import optparse, traceback
+import re
+import sys
+import os
+import os.path
+import shutil
+import subprocess
+import optparse
+import traceback
 from lsst.pex.logging import Log
 from lsst.pex.policy import Policy
 
@@ -27,7 +33,7 @@ cl.add_option("-q", "--quiet", action="store_const", const=-1,
 cl.add_option("-s", "--silent", action="store_const", const=-3,
               dest="verbosity",
               help="print only warning & error messages")
-cl.add_option("-n", "--nodelist", action="store", dest="nodelist", 
+cl.add_option("-n", "--nodelist", action="store", dest="nodelist",
               metavar="file", help="file containing the MPI machine list")
 cl.add_option("-m", "--mpdconfset", action="store_true", dest="forceMpdConf",
               help="force a check for a .mpd.conf file on every desired node")
@@ -39,18 +45,21 @@ cl.args = []
 pkgdirvar = "DC2PIPE_DIR"
 ensurempdconfcmd = "forceMpdConf.sh"
 
+
 def createLog():
     log = Log(Log.getDefaultLog(), "dc2pipe")
     return log
 
+
 def setVerbosity(verbosity):
-    logger.setThreshold(-10 * verbosity)  
+    logger.setThreshold(-10 * verbosity)
 
 logger = createLog()
 
+
 def main():
     try:
-        (cl.opts, cl.args) = cl.parse_args();
+        (cl.opts, cl.args) = cl.parse_args()
         setVerbosity(cl.opts.verbosity)
 
         if len(cl.args) < 1:
@@ -59,7 +68,7 @@ def main():
         if len(cl.args) < 2:
             print usage
             raise RuntimeError("Missing argument: runid")
-    
+
         launchPipeline(cl.args[0], cl.args[1])
 
     except:
@@ -69,6 +78,7 @@ def main():
         logger.log(Log.FATAL, tb[-1].strip())
         logger.log(Log.DEBUG, "".join(tb[0:-1]).strip())
         sys.exit(1)
+
 
 def launchPipeline(policyFile, runid):
     if not os.environ.has_key(pkgdirvar):
@@ -85,7 +95,8 @@ def launchPipeline(policyFile, runid):
     with file(nodesfile) as nodelist:
         for node in nodelist:
             node = node.strip()
-            if (node.startswith('#')): continue
+            if (node.startswith('#')):
+                continue
             (node, n) = node.split(':')
             nnodes += 1
             n = n.strip()
@@ -94,9 +105,10 @@ def launchPipeline(policyFile, runid):
             else:
                 nprocs += 1
 
-            if node in nodes_set: continue
+            if node in nodes_set:
+                continue
 
-            if not os.path.exists(os.path.join(os.environ["HOME"],".mpd.conf")) \
+            if not os.path.exists(os.path.join(os.environ["HOME"], ".mpd.conf")) \
                or cl.opts.forceMpdConf:
                 cmd = "ssh %s %s/bin/%s -V %s" % \
                       (node, os.environ[pkgdirvar], ensurempdconfcmd,
@@ -114,13 +126,14 @@ def launchPipeline(policyFile, runid):
 
     raise RuntimeError("Failed to exec runPipeline.sh")
 
+
 def getNode(nodeentry):
     colon = nodeentry.find(':')
-    if colon < 1:  
+    if colon < 1:
         return nodeentry
     else:
         return nodeentry[0:colon]
 
 if __name__ == "__main__":
     main()
-    
+

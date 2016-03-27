@@ -1,7 +1,13 @@
 #! /usr/bin/env python
 #
-import re, sys, os, os.path, shutil, subprocess
-import optparse, traceback
+import re
+import sys
+import os
+import os.path
+import shutil
+import subprocess
+import optparse
+import traceback
 from lsst.pex.logging import Log
 from lsst.pex.policy import Policy
 
@@ -23,10 +29,10 @@ cl.add_option("-q", "--quiet", action="store_const", const=-1,
 cl.add_option("-s", "--silent", action="store_const", const=-3,
               dest="verbosity",
               help="print only warning & error messages")
-cl.add_option("-p", "--policy", action="store", dest="policy", 
+cl.add_option("-p", "--policy", action="store", dest="policy",
               default=None, metavar="policy_file",
               help="the dc2pipe policy file used to launch the pipelines")
-cl.add_option("-r", "--runid", action="store", dest="runid", 
+cl.add_option("-r", "--runid", action="store", dest="runid",
               default="", metavar="runid",
               help="restrict the kill to pipelines running with this runid")
 
@@ -38,18 +44,21 @@ pkgdirvar = "DC2PIPE_DIR"
 defDomain = ".ncsa.uiuc.edu"
 remkill = "killpipe.sh"
 
+
 def createLog():
     log = Log(Log.getDefaultLog(), "dc2pipe")
     return log
 
+
 def setVerbosity(verbosity):
-    logger.setThreshold(-10 * verbosity)  
+    logger.setThreshold(-10 * verbosity)
 
 logger = createLog()
 
+
 def main():
     try:
-        (cl.opts, cl.args) = cl.parse_args();
+        (cl.opts, cl.args) = cl.parse_args()
         setVerbosity(cl.opts.verbosity)
 
         nodes = []
@@ -61,7 +70,7 @@ def main():
         logger.log(Log.DEBUG, "Killing pipelines on " + ", ".join(nodes))
 
         remcmd = "%s %s" % \
-            (os.path.join(os.environ[pkgdirvar], "bin", remkill),cl.opts.runid)
+            (os.path.join(os.environ[pkgdirvar], "bin", remkill), cl.opts.runid)
         remcmd = remcmd.strip()
 
         for node in nodes:
@@ -80,6 +89,7 @@ def main():
 
     sys.exit(0)
 
+
 def getHeadNodes(pol):
     pipepol = pol.get("pipelines")
     pipelines = pipepol.policyNames(True)
@@ -94,9 +104,9 @@ def getHeadNodes(pol):
                 pnode = pnode[0]
                 pnode = procs.sub("", pnode).strip()
                 nodes.append(pnode)
-            
+
     return nodes
-    
+
 
 if __name__ == "__main__":
     main()
